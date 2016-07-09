@@ -26,4 +26,19 @@ angular.module('main')
 			});
 
 		};
+		$scope.isSemi = false;
+		$scope.radius = 125;
+		$scope.current = 10;
+		$scope.max = 50;
+		$scope.getStyle = function(){
+			return {
+				'top': '50%',
+				'bottom': 'auto',
+				'left': '50%',
+				'transform': 'translateY(-50%) translateX(-50%)',
+				'-moz-transform': 'translateY(-50%) translateX(-50%)',
+				'-webkit-transform': 'translateY(-50%) translateX(-50%)',
+				'font-size': $scope.radius/3.5 + 'px'
+			};
+		};
 	});

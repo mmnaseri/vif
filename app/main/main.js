@@ -4,13 +4,15 @@ angular.module('main', [
 	'ngCordova',
 	'ui.router',
 	'LocalForageModule',
-	'ion-autocomplete'
+	'ion-autocomplete',
+	'angular-svg-round-progressbar',
+	'ionic-lock-screen'
 	// TODO: load other modules selected during generation
 ])
 	.config(function ($stateProvider, $urlRouterProvider) {
 
 		// ROUTING with ui.router
-		$urlRouterProvider.otherwise('/main/subjects');
+		$urlRouterProvider.otherwise('/main/home');
 		$stateProvider
 		// this state is placed in the <ion-nav-view> in the index.html
 			.state('main', {
@@ -18,6 +20,15 @@ angular.module('main', [
 				abstract: true,
 				templateUrl: 'main/templates/menu.html',
 				controller: 'MenuCtrl as menu'
+			})
+			.state('main.home', {
+				url: '/home',
+				views: {
+					'pageContent': {
+						templateUrl: 'main/templates/home.html',
+						controller: 'HomeCtrl'
+					}
+				}
 			})
 			.state('main.subjects', {
 				url: '/subjects',
@@ -55,4 +66,17 @@ angular.module('main', [
 					}
 				}
 			});
+	})
+	.run(function ($ionicPlatform, $lockScreen, DataStore) {
+		$ionicPlatform.ready(function () {
+			DataStore('me').load('me').then(function (me) {
+				if (me && me.passcode) {
+					$lockScreen.show({
+						ACDelbuttons: true,
+						code: me.passcode,
+						touchId: true
+					});
+				}
+			});
+		});
 	});

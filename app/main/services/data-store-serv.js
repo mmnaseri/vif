@@ -69,6 +69,9 @@ angular.module('main')
 					},
 					load: function (id, cache) {
 						var result = $q.defer();
+						if (!$types[type].keys[id]) {
+							return $q.reject();
+						}
 						if (angular.isObject(cache) && angular.isObject(cache[type]) && angular.isDefined(cache[type][id])) {
 							result.resolve(cache[type][id]);
 							return result.promise;

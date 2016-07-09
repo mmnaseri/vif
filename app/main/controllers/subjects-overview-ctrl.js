@@ -9,7 +9,7 @@ angular.module('main')
 		};
 		$scope.$on('$ionicView.beforeEnter', refresh);
 		var sessionStarModal;
-		$ionicModal.fromTemplateUrl("start-topic-session.html", {
+		$ionicModal.fromTemplateUrl('start-topic-session.html', {
 			scope: $scope,
 			animation: 'slide-in-up'
 		}).then(function (modal) {

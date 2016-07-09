@@ -24,7 +24,7 @@
 	<!-- endbuild -->
 </head>
 <body ng-app="Vif">
-
+<lock-screen></lock-screen>
 <!-- the nav bar will be updated as we navigate between views -->
 <!-- <ion-nav-bar> can be removed when using sidemenu (contained in menu.html) -->
 <ion-nav-bar class="bar-assertive">
@@ -51,6 +51,8 @@
 <script src="bower_components/localforage/dist/localforage.js"></script>
 <script src="bower_components/angular-localforage/dist/angular-localForage.js"></script>
 <script src="bower_components/ion-autocomplete/dist/ion-autocomplete.js"></script>
+<script src="bower_components/ionic-lock-screen/dist/index.js"></script>
+<script src="bower_components/angular-svg-round-progressbar/build/roundProgress.min.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -68,6 +70,7 @@
 <script src="main/controllers/subjects-ctrl.js"></script>
 <script src="main/controllers/subjects-add-ctrl.js"></script>
 <script src="main/controllers/menu-ctrl.js"></script>
+<script src="main/controllers/home-ctrl.js"></script>
 <script src="main/constants/config-const.js"></script>
 <script src="app.js"></script>
 <!-- endinject -->

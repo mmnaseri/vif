@@ -78,3 +78,21 @@ $ionicons-font-path: "../assets/fonts" !default;
 	}
 
 }
+
+.progress-wrapper{
+	display: block;
+	position: relative;
+	margin:20px auto !important;
+	font-size: 40px;
+	width: 100%;
+	max-width: 960px;
+	text-align: center;
+}
+
+.progress{
+	position: absolute;
+	color: #bbb;
+	font-weight: 100;
+	line-height: 1;
+}
+

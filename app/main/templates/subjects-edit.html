@@ -1,0 +1,80 @@
+<ion-view view-title="Subject">
+	<ion-content class="padding">
+		<form name="SubjectEditForm">
+			<div class="list">
+				<label class="item item-input">
+					<span class="input-label">Subject</span>
+					<input type="text" placeholder="Subject Title" required name="title" ng-model="subject.title"
+						   autocomplete="off" autocorrect="off">
+				</label>
+				<label class="item item-input">
+					<span class="input-label">Difficulty</span>
+					<div class="range range-positive">
+						<i class="icon ion-happy-outline"></i>
+						<input type="range" name="volume" min="1" max="5" value="3" ng-model="subject.difficulty">
+						<i class="icon ion-sad"></i>
+					</div>
+				</label>
+				<div class="item item-button-right">
+					Topics
+					<button class="button button-energized" ng-click="editTopics()">
+						<i class="ion-edit"></i>
+					</button>
+				</div>
+				<a class="item item-icon-right" ng-click="view.dependencies = !view.dependencies"
+				   ng-show="subjects.length">
+					Depends on <span><ng-pluralize count="subject.dependencies.length"
+												   when="{'0': 'no other subject', 'one': 'one other subject', 'other': '{} other subjects'}"></ng-pluralize></span>
+					<i class="icon ion-chevron-right" ng-show="!view.dependencies"></i>
+					<i class="icon ion-chevron-down" ng-show="view.dependencies"></i>
+				</a>
+				<ion-list ng-show="view.dependencies">
+					<ion-checkbox ng-repeat="otherSubject in subjects | orderBy:'title'" ng-click="bindDependency(otherSubject)"
+								  ng-model="otherSubject.$selected">{{otherSubject.title}}
+					</ion-checkbox>
+				</ion-list>
+			</div>
+			<button class="button button-energized button-block" ng-disabled="!SubjectEditForm.$valid || !subject.topics.length" ng-click="save()">
+				<i class="ion-ios-cloud-upload"></i> Save
+			</button>
+		</form>
+	</ion-content>
+	<script id="edit-topics-modal.html" type="text/ng-template">
+		<ion-modal-view>
+			<ion-header-bar class="bar bar-header bar-energized">
+				<h1 class="title">Topics</h1>
+				<button class="button button-clear button-primary" ng-click="closeModal()"><i class="ion-close"></i></button>
+			</ion-header-bar>
+			<ion-content class="padding">
+				<div class="list">
+					<label class="item item-input">
+						<span class="input-label">Title</span>
+						<input ng-model="newTopic.title" type="text">
+					</label>
+					<label class="item item-input">
+						<span class="input-label">Points</span>
+						<input ng-model="newTopic.points" type="number">
+					</label>
+					<button class="button button-full button-energized" ng-click="subject.topics.push({title: newTopic.title, points: newTopic.points}); newTopic = {};" ng-disabled="!newTopic.title || newTopic.points &lt; 1">Add</button>
+				</div>
+				<div class="item item-divider item-button-right">
+					Topics
+					<button class="button button-clear button-dark" ng-click="newTopic.reorder = !newTopic.reorder">
+						<i class="icon ion-navicon"></i>
+					</button>
+				</div>
+				<ion-scroll>
+					<ion-list show-reorder="newTopic.reorder">
+						<ion-item ng-repeat="topic in subject.topics" class="item-icon-left">
+							<i class="icon ion-document"></i>
+							{{topic.title}}
+							<span class="badge badge-royal">{{topic.points}}</span>
+							<ion-option-button class="button-assertive" ng-click="subject.topics.splice($index, 1)">Delete</ion-option-button>
+							<ion-reorder-button class="ion-navicon" on-reorder="moveItem(topic, $fromIndex, $toIndex)"></ion-reorder-button>
+						</ion-item>
+					</ion-list>
+				</ion-scroll>
+			</ion-content>
+		</ion-modal-view>
+	</script>
+</ion-view>

@@ -32,8 +32,17 @@ angular.module('main', [
 				url: '/subjectsAdd',
 				views: {
 					'pageContent': {
-						templateUrl: 'main/templates/subjects-add.html',
+						templateUrl: 'main/templates/subjects-edit.html',
 						controller: 'SubjectsAddCtrl'
+					}
+				}
+			})
+			.state('main.subjectsEdit', {
+				url: '/subjectsEdit/:id',
+				views: {
+					'pageContent': {
+						templateUrl: 'main/templates/subjects-edit.html',
+						controller: 'SubjectsEditCtrl'
 					}
 				}
 			})

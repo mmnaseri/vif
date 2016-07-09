@@ -10,13 +10,15 @@
 	</ion-header-bar>
 	<ion-content class="padding has-header">
 		<ion-list ng-show="subjects.length">
-			<ion-item ng-repeat="subject in subjects">
+			<ion-item ng-repeat="subject in subjects | orderBy:'title'">
 				{{subject.title}}
-				<ion-option-button class="button-assertive">Delete</ion-option-button>
+				<span class="badge badge-royal">{{subject.points}}</span>
+				<ion-option-button class="button-assertive" ng-click="remove(subject)">Delete</ion-option-button>
+				<ion-option-button class="button-positive" ui-sref="main.subjectsEdit({id: subject.$id})">Edit</ion-option-button>
 			</ion-item>
 		</ion-list>
 		<div class="padding-2x" ng-show="!subjects.length">
-			<button class="button button-energized button-block button-x-large button-round"  ui-sref="main.subjectsAdd">
+			<button class="button button-energized button-block button-x-large button-round" ui-sref="main.subjectsAdd">
 				<square class="padding-top"><i class="ion-plus-round"></i></square>
 			</button>
 			<h3 class="energized text-center">Add a subject</h3>

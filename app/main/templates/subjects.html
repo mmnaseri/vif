@@ -1,6 +1,21 @@
-<ion-view view-title="Subjects">
-	<ion-content class="padding">
-		<div class="padding-2x" ng-if="!subjects.length">
+<ion-view hide-nav-bar="true">
+	<ion-header-bar align-title="center" class="bar-energized">
+		<div class="buttons">
+			<button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+		</div>
+		<h1 class="title">Subjects</h1>
+		<div class="buttons">
+			<button class="button button-clear" ui-sref="main.subjectsAdd"><i class="ion-plus-round"></i></button>
+		</div>
+	</ion-header-bar>
+	<ion-content class="padding has-header">
+		<ion-list ng-show="subjects.length">
+			<ion-item ng-repeat="subject in subjects">
+				{{subject.title}}
+				<ion-option-button class="button-assertive">Delete</ion-option-button>
+			</ion-item>
+		</ion-list>
+		<div class="padding-2x" ng-show="!subjects.length">
 			<button class="button button-energized button-block button-x-large button-round"  ui-sref="main.subjectsAdd">
 				<square class="padding-top"><i class="ion-plus-round"></i></square>
 			</button>

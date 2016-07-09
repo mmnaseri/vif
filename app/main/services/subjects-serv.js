@@ -1,23 +1,17 @@
 'use strict';
 angular.module('main')
-	.service('SubjectsService', function ($localForage) {
+	.service('SubjectsService', function (DataStore) {
+		var subjects = DataStore('subjects');
 		this.load = function (all) {
 			all.length = 0;
-			$localForage.getItem('subjects').then(function (subjects) {
-				angular.forEach(subjects, function (subject) {
-					all.push(subject);
+			subjects.all().then(function (entities) {
+				angular.forEach(entities, function (entity) {
+					all.push(entity);
 				});
 			});
 		};
 		this.add = function (subject) {
-			var insert = function (subjects) {
-				subjects.push(subject);
-				$localForage.setItem('subjects', subjects);
-			};
-			$localForage.getItem('subjects').then(insert, function () {
-				$localForage.setItem('subjects', []).then(function () {
-					insert([]);
-				});
-			});
+			delete subject.$id;
+			return subjects.save(subject);
 		};
 	});

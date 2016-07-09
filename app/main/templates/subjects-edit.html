@@ -49,20 +49,20 @@
 				<div class="list">
 					<label class="item item-input">
 						<span class="input-label">Title</span>
-						<input ng-model="newTopic.title" type="text">
+						<input ng-model="newTopic.title" type="text" placeholder="Topic title">
 					</label>
 					<label class="item item-input">
 						<span class="input-label">Points</span>
-						<input ng-model="newTopic.points" type="number">
+						<input ng-model="newTopic.points" type="number" placeholder="Study points">
 					</label>
 					<button class="button button-full button-energized" ng-click="subject.topics.push({title: newTopic.title, points: newTopic.points}); newTopic = {};" ng-disabled="!newTopic.title || newTopic.points &lt; 1">Add</button>
 				</div>
-				<div class="item item-divider item-button-right">
+				<h2 class="item item-button-right" show-reorder="newTopic.reorder">
 					Topics
 					<button class="button button-clear button-dark" ng-click="newTopic.reorder = !newTopic.reorder">
 						<i class="icon ion-navicon"></i>
 					</button>
-				</div>
+				</h2>
 				<ion-scroll>
 					<ion-list show-reorder="newTopic.reorder">
 						<ion-item ng-repeat="topic in subject.topics" class="item-icon-left">

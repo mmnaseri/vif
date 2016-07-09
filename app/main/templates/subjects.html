@@ -17,11 +17,9 @@
 				<ion-option-button class="button-positive" ui-sref="main.subjectsEdit({id: subject.$id})">Edit</ion-option-button>
 			</ion-item>
 		</ion-list>
-		<div class="padding-2x" ng-show="!subjects.length">
-			<button class="button button-energized button-block button-x-large button-round" ui-sref="main.subjectsAdd">
-				<square class="padding-top"><i class="ion-plus-round"></i></square>
-			</button>
-			<h3 class="energized text-center">Add a subject</h3>
+		<div ng-show="!subjects.length">
+			<h4 class="text-center">You are all caught up</h4>
+			<square class="no-more-to-do"></square>
 		</div>
 	</ion-content>
 </ion-view>

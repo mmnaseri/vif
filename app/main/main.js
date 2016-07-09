@@ -45,14 +45,5 @@ angular.module('main', [
 						controller: 'SubjectsEditCtrl'
 					}
 				}
-			})
-			.state('main.debug', {
-				url: '/debug',
-				views: {
-					'pageContent': {
-						templateUrl: 'main/templates/debug.html',
-						controller: 'DebugCtrl as ctrl'
-					}
-				}
 			});
 	});

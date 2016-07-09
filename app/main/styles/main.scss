@@ -5,15 +5,15 @@ in ionic's _variables.scss file.
 For example, you might change some of the default colors:
 */
 
-$light:                           #fff !default;
-$stable:                          #f8f8f8 !default;
-$positive:                        #4a87ee !default;
-$calm:                            #43cee6 !default;
-$balanced:                        #66cc33 !default;
-$energized:                       #f0b840 !default;
-$assertive:                       #ef4e3a !default;
-$royal:                           #8a6de9 !default;
-$dark:                            #444 !default;
+$light: #fff !default;
+$stable: #f8f8f8 !default;
+$positive: #4a87ee !default;
+$calm: #43cee6 !default;
+$balanced: #66cc33 !default;
+$energized: #f0b840 !default;
+$assertive: #ef4e3a !default;
+$royal: #8a6de9 !default;
+$dark: #444 !default;
 
 // The path for our ionicons font files, relative to the built & temporary main.css
 $ionicons-font-path: "../assets/fonts" !default;
@@ -21,4 +21,41 @@ $ionicons-font-path: "../assets/fonts" !default;
 // Include all of Ionic
 @import "../../bower_components/ionic/scss/ionic";
 
+.button-x-large {
+	font-size: 120px;
+	padding: 15px;
+}
 
+.square-container {
+	display: inline-block;
+	position: relative;
+	width: 100%;
+}
+
+.square-before {
+	padding-top: 100%;
+}
+
+.square {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.padding-2x {
+	padding: 4rem;
+}
+
+.padding-top .square {
+	padding-top: 50%;
+	i {
+		position: relative;
+		top: -60px;
+	}
+}
+
+.button-round {
+	border-radius: 50%;
+}

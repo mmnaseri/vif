@@ -3,12 +3,14 @@ angular.module('main', [
 	'ionic',
 	'ngCordova',
 	'ui.router',
+	'LocalForageModule',
+	'ion-autocomplete'
 	// TODO: load other modules selected during generation
 ])
 	.config(function ($stateProvider, $urlRouterProvider) {
 
 		// ROUTING with ui.router
-		$urlRouterProvider.otherwise('/main/list');
+		$urlRouterProvider.otherwise('/main/subjects');
 		$stateProvider
 		// this state is placed in the <ion-nav-view> in the index.html
 			.state('main', {
@@ -17,21 +19,21 @@ angular.module('main', [
 				templateUrl: 'main/templates/menu.html',
 				controller: 'MenuCtrl as menu'
 			})
-			.state('main.list', {
-				url: '/list',
+			.state('main.subjects', {
+				url: '/subjects',
 				views: {
 					'pageContent': {
-						templateUrl: 'main/templates/list.html',
-						// controller: '<someCtrl> as ctrl'
+						templateUrl: 'main/templates/subjects.html',
+						controller: 'SubjectsCtrl'
 					}
 				}
 			})
-			.state('main.listDetail', {
-				url: '/list/detail',
+			.state('main.subjectsAdd', {
+				url: '/subjectsAdd',
 				views: {
 					'pageContent': {
-						templateUrl: 'main/templates/list-detail.html',
-						// controller: '<someCtrl> as ctrl'
+						templateUrl: 'main/templates/subjects-add.html',
+						controller: 'SubjectsAddCtrl'
 					}
 				}
 			})

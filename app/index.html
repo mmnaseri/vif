@@ -13,6 +13,7 @@
 
 	<!-- build:css styles/vendor.css -->
 	<!-- bower:css -->
+	<link rel="stylesheet" href="bower_components/ion-autocomplete/dist/ion-autocomplete.css" />
 	<!-- endbower -->
 	<!-- endbuild -->
 
@@ -48,14 +49,21 @@
 <script src="bower_components/angular-translate/angular-translate.js"></script>
 <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
 <script src="bower_components/localforage/dist/localforage.js"></script>
+<script src="bower_components/angular-localforage/dist/angular-localForage.js"></script>
+<script src="bower_components/ion-autocomplete/dist/ion-autocomplete.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
 <!-- build:js scripts/app.js -->
 <!-- inject:js -->
 <script src="main/main.js"></script>
+<script src="main/services/subjects-serv.js"></script>
 <script src="main/services/main-serv.js"></script>
+<script src="main/services/data-store-serv.js"></script>
+<script src="main/directives/square-dir.js"></script>
 <script src="main/controllers/user-ctrl.js"></script>
+<script src="main/controllers/subjects-ctrl.js"></script>
+<script src="main/controllers/subjects-add-ctrl.js"></script>
 <script src="main/controllers/menu-ctrl.js"></script>
 <script src="main/controllers/debug-ctrl.js"></script>
 <script src="main/constants/config-const.js"></script>

@@ -1,15 +1,15 @@
 {
-  "extends": "../.eslintrc",
-  "env": {
-    "node": false,
-    "browser": true
-  },
-  "globals": {
-    "angular": true,
-    "ionic": true,
-    "localforage": true
-  },
-  "rules": {
-    "no-console": 1
-  }
+	"extends": "../.eslintrc",
+	"env": {
+		"node": false,
+		"browser": true
+	},
+	"globals": {
+		"angular": true,
+		"ionic": true,
+		"localforage": true
+	},
+	"rules": {
+		"no-console": 1
+	}
 }

@@ -57,18 +57,18 @@
 					</label>
 					<button class="button button-full button-energized" ng-click="subject.topics.push({title: newTopic.title, points: newTopic.points}); newTopic = {};" ng-disabled="!newTopic.title || newTopic.points &lt; 1">Add</button>
 				</div>
-				<h2 class="item item-button-right" show-reorder="newTopic.reorder">
-					Topics
-					<button class="button button-clear button-dark" ng-click="newTopic.reorder = !newTopic.reorder">
-						<i class="icon ion-navicon"></i>
-					</button>
-				</h2>
-				<ion-scroll>
+				<ion-scroll ng-show="subject.topics.length" class="padding">
+					<h2 class="item item-button-right" show-reorder="newTopic.reorder && subject.topics.length &gt; 1" ng-show="subject.topics.length">
+						Topics
+						<button class="button button-clear button-dark" ng-click="newTopic.reorder = !newTopic.reorder" ng-show="subject.topics.length &gt; 1">
+							<i class="icon ion-navicon"></i>
+						</button>
+					</h2>
 					<ion-list show-reorder="newTopic.reorder">
-						<ion-item ng-repeat="topic in subject.topics" class="item-icon-left">
+						<ion-item ng-repeat="topic in subject.topics" class="item item-icon-left">
 							<i class="icon ion-document"></i>
 							{{topic.title}}
-							<span class="badge badge-royal">{{topic.points}}</span>
+							<span class="badge badge-stable">{{topic.points}}</span>
 							<ion-option-button class="button-assertive" ng-click="subject.topics.splice($index, 1)">Delete</ion-option-button>
 							<ion-reorder-button class="ion-navicon" on-reorder="moveItem(topic, $fromIndex, $toIndex)"></ion-reorder-button>
 						</ion-item>

@@ -45,5 +45,14 @@ angular.module('main', [
 						controller: 'SubjectsEditCtrl'
 					}
 				}
+			})
+			.state('main.subjectsOverview', {
+				url: '/subjectsOverview/:id',
+				views: {
+					'pageContent': {
+						templateUrl: 'main/templates/subjects-overview.html',
+						controller: 'SubjectsOverviewCtrl'
+					}
+				}
 			});
 	});

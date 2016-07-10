@@ -1,6 +1,6 @@
 'use strict';
 angular.module('main')
-	.controller('SubjectsOverviewCtrl', function ($scope, SubjectsService, $stateParams, $ionicActionSheet, $ionicModal) {
+	.controller('SubjectsOverviewCtrl', function ($scope, SubjectsService, $stateParams, $ionicActionSheet, $ionicModal, Sessions, $state) {
 		$scope.subject = {};
 		var refresh = function () {
 			SubjectsService.get($stateParams.id).then(function (subject) {
@@ -38,7 +38,8 @@ angular.module('main')
 				}
 			});
 		};
-		$scope.startSession = function (topic) {
+		$scope.startSession = function (topic, index) {
+			topic.$index = index;
 			$scope.selectedTopic = topic;
 			sessionStarModal.show();
 		};
@@ -48,6 +49,11 @@ angular.module('main')
 		$scope.$on('$destroy', function () {
 			sessionStarModal.remove();
 		});
+		$scope.beginSession = function (minutes) {
+			Sessions.start(minutes, $scope.subject, $scope.selectedTopic).then(function () {
+				$state.go('main.home');
+			});
+		};
 		$scope.markDone = function () {
 			var hide = $ionicActionSheet.show({
 				buttons: [],

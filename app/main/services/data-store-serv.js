@@ -1,6 +1,6 @@
 'use strict';
 angular.module('main')
-	.factory('DataStore', function ($localForage, $q) {
+	.factory('DataStore', function ($localForage, $q, $filter) {
 		var generateKey = function () {
 			var alphanum = ['a', 'b', 'c', 'd', 'e', 'f', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 			var key = [];
@@ -69,15 +69,16 @@ angular.module('main')
 					},
 					load: function (id, cache) {
 						var result = $q.defer();
-						if (!$types[type].keys[id]) {
-							return $q.reject();
-						}
 						if (angular.isObject(cache) && angular.isObject(cache[type]) && angular.isDefined(cache[type][id])) {
 							result.resolve(cache[type][id]);
 							return result.promise;
 						}
 						$types[type].keysLoaded.then(function () {
 							if (!angular.isString(id)) {
+								result.reject();
+								return;
+							}
+							if (!$types[type].keys[id]) {
 								result.reject();
 								return;
 							}
@@ -119,11 +120,83 @@ angular.module('main')
 									entities.push(entity);
 								});
 							});
-							$q.all(dependencies).then(function () {
-								result.resolve(entities);
-							}, result.reject);
+							if (dependencies.length) {
+								$q.all(dependencies).then(function () {
+									result.resolve(entities);
+								}, result.reject);
+							} else {
+								result.resolve([]);
+							}
 						}, result.reject);
-						return result.promise;
+						var enhancePromise = function (promise) {
+							promise.where = function (selector) {
+								var deferred = $q.defer();
+								var filter = $filter('filter');
+								promise.then(function (entities) {
+									var filtered = filter(entities, selector);
+									deferred.resolve(filtered);
+								}, deferred.reject);
+								return enhancePromise(deferred.promise);
+							};
+							promise.orderBy = function (predicate, reverse, comparator) {
+								var deferred = $q.defer();
+								var orderBy = $filter('orderBy');
+								promise.then(function (entities) {
+									var ordered = orderBy(entities, predicate, !!reverse, comparator);
+									deferred.resolve(ordered);
+								}, deferred.reject);
+								return enhancePromise(deferred.promise);
+							};
+							promise.first = function () {
+								var deferred = $q.defer();
+								promise.then(function (entities) {
+									deferred.resolve(entities.length ? entities[0] : null);
+								}, deferred.reject);
+								return enhancePromise(deferred.promise);
+							};
+							promise.last = function () {
+								var deferred = $q.defer();
+								promise.then(function (entities) {
+									deferred.resolve(entities.length ? entities[entities.length - 1] : undefined);
+								}, deferred.reject);
+								return enhancePromise(deferred.promise);
+							};
+							promise.keep = function (number) {
+								var deferred = $q.defer();
+								promise.then(function (entities) {
+									var selection = [];
+									for (var i = 0; i < Math.min(number, entities.length); i ++) {
+										selection.push(entities[i]);
+									}
+									deferred.resolve(selection);
+								}, deferred.reject);
+								return enhancePromise(deferred.promise);
+							};
+							promise.drop = function (number) {
+								var deferred = $q.defer();
+								promise.then(function (entities) {
+									var selection = [];
+									for (var i = number; i < entities.length; i ++) {
+										selection.push(entities[i]);
+									}
+									deferred.resolve(selection);
+								}, deferred.reject);
+								return enhancePromise(deferred.promise);
+							};
+							promise.map = function (mapper) {
+								var deferred = $q.defer();
+								promise.then(function (entities) {
+									var selection = [];
+									angular.forEach(entities, function (entity, index) {
+										selection.push(mapper(entity, index));
+									});
+									deferred.resolve(selection);
+								}, deferred.reject);
+								return enhancePromise(deferred.promise);
+							};
+							return promise;
+						};
+						return enhancePromise(result.promise);
 					},
 					clear: function () {
 						var promises = [];

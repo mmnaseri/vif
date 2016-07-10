@@ -1,14 +1,24 @@
 <ion-view view-title="Home">
   <ion-content class="padding">
-	  <div ng-show="!active.$id" class="card">
-		  <p class="item item-icon-left">
+	  <div class="card" ng-show="!active.$id">
+		  <p class="item item-icon-left item-dark">
 			  <i class="icon ion-ios-lightbulb-outline"></i>
-			  <span>You do not have any active sessions</span>
+			  <span>You do not have any running sessions</span>
 		  </p>
+	  </div>
+	  <div ng-show="!active.$id && paused.length" class="card">
+		  <ion-list>
+			  <ion-item class="item-icon-left" ng-repeat="session in paused" ng-click="resumeSession(session)">
+				  <i class="icon ion-ios-pause-outline"></i>
+				  {{session.subject.title}} &mdash; {{session.subject.topics[session.topic].title}}
+				  <span class="badge badge-stable">{{getTime(session.remaining)}}</span>
+				  <ion-option-button class="button-assertive" ng-click="cancelSession(session)">End</ion-option-button>
+			  </ion-item>
+		  </ion-list>
 	  </div>
 	  <div ng-show="active.$id" ng-init="interacting = false">
 		  <div class="progress-wrapper">
-			  <div class="progress ng-cloak" ng-style="getStyle()" ng-show="!interacting">{{getTime()}}</div>
+			  <div class="progress ng-cloak" ng-style="getStyle()" ng-show="!interacting">{{getTime(active.remaining)}}</div>
 			  <round-progress
 				  max="active.length"
 				  current="active.remaining"
@@ -31,7 +41,7 @@
 					  <button class="button button-calm" ng-click="pauseSession()">
 						  <i class="ion-pause"></i>
 					  </button>
-					  <button class="button button-assertive" ng-click="cancelSession()">
+					  <button class="button button-assertive" ng-click="cancelSession(active)">
 						  <i class="ion-close"></i>
 					  </button>
 				  </div>

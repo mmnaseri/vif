@@ -50,13 +50,26 @@ angular.module('main')
 			sessionStarModal.remove();
 		});
 		$scope.beginSession = function (minutes) {
-			$scope.subject.started = true;
-			$scope.selectedTopic.done = false;
-			$scope.selectedTopic.earned = 0;
 			SubjectsService.save($scope.subject).then(function () {
 				Sessions.start(minutes, $scope.subject, $scope.selectedTopic).then(function () {
+					$scope.subject.started = true;
+					$scope.selectedTopic.done = false;
+					$scope.selectedTopic.earned = 0;
 					$scope.closeModal();
 					$state.go('main.home');
+				}, function (session) {
+					var hide = $ionicActionSheet.show({
+						buttons: [],
+						destructiveText: 'End the other session',
+						titleText: 'There is another session in progress. Do you want to end that session?',
+						cancelText: 'Cancel',
+						destructiveButtonClicked: function () {
+							Sessions.cancel(session).then(function () {
+								$scope.beginSession(minutes);
+								hide();
+							});
+						}
+					});
 				});
 			});
 		};

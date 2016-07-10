@@ -50,8 +50,14 @@ angular.module('main')
 			sessionStarModal.remove();
 		});
 		$scope.beginSession = function (minutes) {
-			Sessions.start(minutes, $scope.subject, $scope.selectedTopic).then(function () {
-				$state.go('main.home');
+			$scope.subject.started = true;
+			$scope.selectedTopic.done = false;
+			$scope.selectedTopic.earned = 0;
+			SubjectsService.save($scope.subject).then(function () {
+				Sessions.start(minutes, $scope.subject, $scope.selectedTopic).then(function () {
+					$scope.closeModal();
+					$state.go('main.home');
+				});
 			});
 		};
 		$scope.markDone = function () {

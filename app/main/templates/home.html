@@ -8,20 +8,10 @@
 	  </div>
 	  <div ng-show="active.$id" ng-init="interacting = false">
 		  <div class="progress-wrapper">
-			  <div class="progress ng-cloak" ng-style="getStyle()" ng-show="!interacting">50:12</div>
-			  <div class="progress ng-cloak" ng-style="getStyle()" ng-show="interacting">
-				  <div class="button-bar">
-					  <button class="button button-calm">
-						  <i class="ion-pause"></i>
-					  </button>
-					  <button class="button button-assertive">
-						  <i class="ion-close"></i>
-					  </button>
-				  </div>
-			  </div>
+			  <div class="progress ng-cloak" ng-style="getStyle()" ng-show="!interacting">{{getTime()}}</div>
 			  <round-progress
-				  max="max"
-				  current="current"
+				  max="active.length"
+				  current="active.remaining"
 				  color="#45ccce"
 				  bgcolor="#a9e2e5"
 				  radius="125"
@@ -36,6 +26,16 @@
 				  animation-delay="0"
 			  on-double-tap="interacting = !interacting">
 			  </round-progress>
+			  <div class="progress ng-cloak" ng-style="getStyle()" ng-show="interacting">
+				  <div class="button-bar">
+					  <button class="button button-calm" ng-click="pauseSession()">
+						  <i class="ion-pause"></i>
+					  </button>
+					  <button class="button button-assertive" ng-click="cancelSession()">
+						  <i class="ion-close"></i>
+					  </button>
+				  </div>
+			  </div>
 		  </div>
 		  <h2 class="text-center">{{active.subject.title}}</h2>
 		  <h3 class="text-center">{{active.subject.topics[active.topic].title}}</h3>

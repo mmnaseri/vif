@@ -65,7 +65,31 @@ angular.module('main', [
 						controller: 'SubjectsOverviewCtrl'
 					}
 				}
+			})
+			.state('main.sessionsListing', {
+				url: '/sessionsListing/:id',
+				views: {
+					'pageContent': {
+						templateUrl: 'main/templates/sessions-listing.html',
+						controller: 'SessionsListingCtrl'
+					}
+				}
 			});
+	})
+	.run(function ($rootScope) {
+		var pad = function (num) {
+			if ((num + '').length < 2) {
+				return '0' + num;
+			}
+			return num + '';
+		};
+		$rootScope.getTime = function (remaining) {
+			var seconds = remaining / 1000;
+			var minutes = Math.floor(seconds / 60);
+			seconds = seconds % 60;
+			return pad(minutes) + ':' + pad(seconds);
+		};
+
 	})
 	.run(function ($ionicPlatform, $lockScreen, DataStore) {
 		$ionicPlatform.ready(function () {

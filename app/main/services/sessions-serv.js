@@ -66,8 +66,10 @@ angular.module('main')
 				return item.active === true && item.running === true;
 			}).first().then(function (session) {
 				if (!session) {
+					console.log('-- this is new');
 					deferred.resolve();
 				} else {
+					console.log('-- another one running');
 					deferred.reject(session);
 				}
 			});
@@ -107,13 +109,33 @@ angular.module('main')
 			return repository.save(session);
 		};
 		this.resume = function (session) {
-			session.running = true;
-			return repository.save(session);
+			var deferred = $q.defer();
+			repository.all().where(function (item) {
+				return item.active === true && item.running === true;
+			}).first().then(function (session) {
+				if (!session) {
+					console.log('-- this is new');
+					deferred.resolve();
+				} else {
+					console.log('-- another one running');
+					deferred.reject(session);
+				}
+			});
+			return deferred.promise.then(function () {
+				session.running = true;
+				return repository.save(session);
+			});
 		};
 		this.cancel = function (session) {
 			session.running = false;
 			session.active = false;
 			session.note = 'Cancelled';
 			return repository.save(session);
+		};
+		this.all = function () {
+			return repository.all();
+		};
+		this.remove = function (session) {
+			return repository.remove(session);
 		};
 	});

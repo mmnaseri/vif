@@ -4,8 +4,8 @@
 			<div class="item item-title">
 				<h3>{{subject.title}}</h3>
 			</div>
-			<a class="item item-icon-left" ng-repeat="topic in subject.topics" ng-click="topic.done ? restartTopic(topic) : startSession(topic, $index)">
-				<i class="icon {{topic.done ? 'ion-ios-checkmark' : 'ion-ios-circle-outline'}}"></i>
+			<a class="item item-icon-left" ng-repeat="topic in subject.topics" ng-click="topicSession(topic)">
+				<i class="icon" ng-class="{'active': 'ion-ios-bolt-outline', 'paused': 'ion-ios-pause-outline', 'fresh': 'ion-ios-circle-outline', 'done': 'ion-ios-checkmark'}[topic.status]"></i>
 				{{topic.title}}
 				<span class="badge badge-stable">{{topic.points}}</span>
 			</a>

@@ -10,7 +10,8 @@
 	</ion-header-bar>
 	<ion-content class="padding has-header">
 		<ion-list ng-show="subjects.length">
-			<ion-item ng-repeat="subject in subjects | orderBy:'title'" ui-sref="main.subjectsOverview({id: subject.$id})">
+			<ion-item ng-repeat="subject in subjects | orderBy:'title'" ui-sref="main.subjectsOverview({id: subject.$id})" class="item-icon-left">
+				<i class="icon ion-university"></i>
 				{{subject.title}}
 				<span class="badge badge-stable">{{subject.points}}</span>
 				<ion-option-button class="button-assertive" ng-click="remove(subject)">Delete</ion-option-button>

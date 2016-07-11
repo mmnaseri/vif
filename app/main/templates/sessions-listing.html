@@ -1,0 +1,38 @@
+<ion-view view-title="Sessions">
+  <ion-content class="padding">
+	  <div class="card" ng-show="active.$id">
+		  <ion-list>
+			  <ion-item class="item-icon-left">
+				  <i class="icon ion-ios-bolt-outline"></i>
+				  <p>Currently running:</p>
+				  <h2>
+					  {{active.subject.title || '(untitled)'}}
+					  &mdash;
+					  {{active.subject.topics[active.topic].title || '(no topic)'}}
+				  </h2>
+				  <ion-option-button class="button-assertive" ng-click="end(active)">End</ion-option-button>
+				  <ion-option-button class="button-calm" ng-click="pause(active)">Pause</ion-option-button>
+			  </ion-item>
+		  </ion-list>
+	  </div>
+	  <ion-list>
+		  <div ng-repeat="date in groupedSessions.$keys">
+			  <ion-item class="item-divider item-icon-left">
+				  <i class="icon ion-ios-calendar-outline"></i>
+				  {{date}}
+			  </ion-item>
+			  <ion-item ng-repeat="session in groupedSessions[date]" class="item-icon-left">
+				  <i class="icon {{session.active && session.running ? 'ion-ios-bolt-outline' : (session.active && !session.running ? 'ion-ios-pause-outline' : 'ion-ios-checkmark-outline')}}"></i>
+				  <h2>
+					  {{session.subject.title || '(untitled)'}}
+					  &mdash;
+					  {{session.subject.topics[session.topic].title || '(no topic)'}}
+				  </h2>
+				  <span class="badge badge-stable">{{getTime(session.remaining)}}</span>
+				  <ion-option-button class="button-assertive" ng-click="end(session)" ng-disabled="session.active && session.running">{{session.active ? 'End' : 'Delete'}}</ion-option-button>
+				  <ion-option-button class="button-calm" ng-click="resume(session)" ng-show="session.active && !session.running && !active.$id">Resume</ion-option-button>
+			  </ion-item>
+		  </div>
+	  </ion-list>
+  </ion-content>
+</ion-view>

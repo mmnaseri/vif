@@ -79,7 +79,7 @@ angular.module('main')
 								return;
 							}
 							if (!$types[type].keys[id]) {
-								result.reject();
+								result.resolve(null);
 								return;
 							}
 							$localForage.getItem(type + '-' + id).then(function (item) {
@@ -165,7 +165,7 @@ angular.module('main')
 								var deferred = $q.defer();
 								promise.then(function (entities) {
 									var selection = [];
-									for (var i = 0; i < Math.min(number, entities.length); i ++) {
+									for (var i = 0; i < Math.min(number, entities.length); i++) {
 										selection.push(entities[i]);
 									}
 									deferred.resolve(selection);
@@ -176,7 +176,7 @@ angular.module('main')
 								var deferred = $q.defer();
 								promise.then(function (entities) {
 									var selection = [];
-									for (var i = number; i < entities.length; i ++) {
+									for (var i = number; i < entities.length; i++) {
 										selection.push(entities[i]);
 									}
 									deferred.resolve(selection);
@@ -191,6 +191,82 @@ angular.module('main')
 										selection.push(mapper(entity, index));
 									});
 									deferred.resolve(selection);
+								}, deferred.reject);
+								return enhancePromise(deferred.promise);
+							};
+							promise.project = function () {
+								var fields = arguments;
+								return promise.map(function (item) {
+									var result = {};
+									angular.forEach(fields, function (field) {
+										result[field] = item[field];
+									});
+									return result;
+								});
+							};
+							promise.pick = function (field) {
+								return promise.map(function (item) {
+									return item[field];
+								});
+							};
+							promise.distinct = function (field, transformer) {
+								return enhancePromise(promise.pick(field).then(function (items) {
+									var result = [];
+									angular.forEach(items, function (item) {
+										var value = item;
+										if (transformer) {
+											value = transformer(value);
+										}
+										var found = -1;
+										angular.forEach(result, function (existing, index) {
+											found = (transformer ? existing.$value : existing) === value ? index : found;
+										});
+										if (found === -1) {
+											if (transformer) {
+												result.push({
+													$original: [item],
+													$value: value
+												});
+											} else {
+												result.push(item);
+											}
+										} else if (transformer) {
+											result[found].$original.push(item);
+										}
+									});
+									return result;
+								}));
+							};
+							promise.groupBy = function (field, transformer) {
+								var deferred = $q.defer();
+								var noop = function (x) {
+									return x;
+								};
+								promise.distinct(field, transformer || noop).then(function (keys) {
+									var finalResult = {
+										$keys: []
+									};
+									var finalSelection = [];
+									angular.forEach(keys, function (key) {
+										finalResult.$keys.push(key.$value);
+										var localSelection = [];
+										var selection = [];
+										angular.forEach(key.$original, function (value) {
+											var selector = {};
+											selector[field] = value;
+											localSelection.push(promise.where(selector).then(function (entities) {
+												angular.forEach(entities, function (entity) {
+													selection.push(entity);
+												});
+											}, result.reject));
+										});
+										finalSelection.push($q.all(localSelection).then(function () {
+											finalResult[key.$value] = selection;
+										}, result.reject));
+									});
+									$q.all(finalSelection).then(function () {
+										deferred.resolve(finalResult);
+									}, result.reject);
 								}, deferred.reject);
 								return enhancePromise(deferred.promise);
 							};

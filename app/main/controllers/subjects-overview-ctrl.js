@@ -154,7 +154,7 @@ angular.module('main')
 		$scope.$on('$destroy', function () {
 			sessionStarModal.remove();
 		});
-		$scope.beginSession = function (minutes) {
+		$scope.beginSession = function (minutes, rest) {
 			Sessions.start(minutes, $scope.subject, $scope.selectedTopic).then(function () {
 				$scope.subject.started = true;
 				$scope.selectedTopic.done = false;

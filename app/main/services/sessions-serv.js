@@ -60,7 +60,8 @@ angular.module('main')
 				return sessions;
 			});
 		};
-		this.start = function (length, subject, topic) {
+		this.start = function (length, subject, topic, rest) {
+			rest = rest || Math.floor(length * length / 153 + 2);
 			var deferred = $q.defer();
 			repository.all().where(function (item) {
 				return item.active === true && item.running === true;
@@ -80,7 +81,8 @@ angular.module('main')
 					running: true,
 					createDate: Date.now(),
 					length: milliseconds, //convert to milliseconds
-					remaining: milliseconds
+					remaining: milliseconds,
+					rest: rest
 				});
 			});
 		};

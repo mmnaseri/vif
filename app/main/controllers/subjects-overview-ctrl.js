@@ -9,6 +9,7 @@ angular.module('main')
 				}).then(function (sessions) {
 					angular.forEach(subject.topics, function (topic, index) {
 						topic.$index = index;
+						topic.status = '';
 						angular.forEach(sessions, function (session) {
 							if (session.topic === index) {
 								topic.session = session;
@@ -17,12 +18,16 @@ angular.module('main')
 								} else if (session.active) {
 									topic.status = 'paused';
 								} else {
-									topic.status = topic.done ? 'done' : 'fresh';
+									topic.status = (topic.done || !session.remaining) ? 'done' : 'fresh';
 								}
-							} else {
-								topic.status = topic.done ? 'done' : 'fresh';
 							}
 						});
+						if (!topic.status) {
+							topic.status = topic.done ? 'done' : 'fresh';
+						}
+						if (topic.status == 'done') {
+							topic.done = true;
+						}
 					});
 					$scope.subject = subject;
 				});
@@ -79,7 +84,7 @@ angular.module('main')
 								Sessions.resume(topic.session).then(function () {
 									hide();
 									refresh();
-								}, function () {
+								}, function (existingSession) {
 									hide();
 									var hideSecond = $ionicActionSheet.show({
 										buttons: [],
@@ -87,7 +92,7 @@ angular.module('main')
 										titleText: 'There is another session in progress. Do you want to end that session?',
 										cancelText: 'Cancel',
 										destructiveButtonClicked: function () {
-											Sessions.cancel(session).then(function () {
+											Sessions.cancel(existingSession).then(function () {
 												resumeSession();
 												hideSecond();
 											});
@@ -150,14 +155,11 @@ angular.module('main')
 			sessionStarModal.remove();
 		});
 		$scope.beginSession = function (minutes) {
-			console.log('beginning ' + minutes);
 			Sessions.start(minutes, $scope.subject, $scope.selectedTopic).then(function () {
-				console.log('started the session');
 				$scope.subject.started = true;
 				$scope.selectedTopic.done = false;
 				$scope.selectedTopic.earned = 0;
 				SubjectsService.save($scope.subject).then(function () {
-					console.log('saved the subject');
 					$scope.closeModal();
 					$state.go('main.home');
 				});

@@ -270,6 +270,17 @@ angular.module('main')
 								}, deferred.reject);
 								return enhancePromise(deferred.promise);
 							};
+							promise.remove = function () {
+								var deferred = $q.defer();
+								promise.then(function (entities) {
+									var all = [];
+									angular.forEach(entities, function (entity) {
+										all.push($types[type].callbacks.remove(entity));
+									});
+									$q.all(all).then(deferred.resolve, deferred.reject);
+								});
+								return deferred.promise;
+							};
 							return promise;
 						};
 						return enhancePromise(result.promise);

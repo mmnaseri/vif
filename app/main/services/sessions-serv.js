@@ -66,10 +66,8 @@ angular.module('main')
 				return item.active === true && item.running === true;
 			}).first().then(function (session) {
 				if (!session) {
-					console.log('-- this is new');
 					deferred.resolve();
 				} else {
-					console.log('-- another one running');
 					deferred.reject(session);
 				}
 			});
@@ -114,10 +112,8 @@ angular.module('main')
 				return item.active === true && item.running === true;
 			}).first().then(function (session) {
 				if (!session) {
-					console.log('-- this is new');
 					deferred.resolve();
 				} else {
-					console.log('-- another one running');
 					deferred.reject(session);
 				}
 			});

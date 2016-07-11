@@ -22,13 +22,13 @@
 				  {{date}}
 			  </ion-item>
 			  <ion-item ng-repeat="session in groupedSessions[date]" class="item-icon-left">
-				  <i class="icon {{session.active && session.running ? 'ion-ios-bolt-outline' : (session.active && !session.running ? 'ion-ios-pause-outline' : 'ion-ios-checkmark-outline')}}"></i>
+				  <i class="icon {{session.active && session.running ? 'ion-ios-bolt-outline' : (session.active && !session.running ? 'ion-ios-pause-outline' : (session.remaining ? 'ion-ios-close-outline' : 'ion-ios-checkmark-outline'))}}"></i>
 				  <h2>
 					  {{session.subject.title || '(untitled)'}}
 					  &mdash;
 					  {{session.subject.topics[session.topic].title || '(no topic)'}}
 				  </h2>
-				  <span class="badge badge-stable">{{getTime(session.remaining)}}</span>
+				  <span class="badge badge-stable" ng-show="session.remaining">{{getTime(session.remaining)}}</span>
 				  <ion-option-button class="button-assertive" ng-click="end(session)" ng-disabled="session.active && session.running">{{session.active ? 'End' : 'Delete'}}</ion-option-button>
 				  <ion-option-button class="button-calm" ng-click="resume(session)" ng-show="session.active && !session.running && !active.$id">Resume</ion-option-button>
 			  </ion-item>

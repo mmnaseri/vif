@@ -23,6 +23,7 @@ angular.module('main')
 		this.remove = function (subject) {
 			var promises = [];
 			subjects.all().then(function (allSubjects) {
+				//remove this subject from any subject that has it as a dependency
 				angular.forEach(allSubjects, function (other) {
 					var modified = false;
 					angular.forEach(other.dependencies || [], function (dependency, index) {
@@ -36,6 +37,12 @@ angular.module('main')
 					}
 				});
 			});
+			//remove all the sessions for this subject
+			promises.push(DataStore('sessions').all().where({
+				subject: {
+					$id: subject.$id
+				}
+			}).remove());
 			return $q.all(promises).then(function () {
 				return subjects.remove(subject);
 			});

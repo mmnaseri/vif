@@ -79,7 +79,6 @@ angular.module('main')
 					topic: topic.$index,
 					active: true,
 					running: true,
-					createDate: Date.now(),
 					length: milliseconds, //convert to milliseconds
 					remaining: milliseconds,
 					rest: rest

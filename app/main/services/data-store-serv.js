@@ -38,9 +38,14 @@ angular.module('main')
 									entity[property] = DataStore.Ref(entity[property].$type, entity[property].$id);
 								}
 							});
+							var now = Date.now();
+							entity.modifiedDate = null;
 							if (!angular.isString(entity.$id)) {
 								entity.$id = uniqueKey($types[type].keys);
 								$types[type].keys[entity.$id] = true;
+								entity.createDate = now;
+							} else {
+								entity.modifiedDate = now;
 							}
 							$localForage.setItem(type + '-' + entity.$id, entity).then(result.resolve, result.reject);
 						}, result.reject);

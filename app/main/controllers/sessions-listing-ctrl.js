@@ -16,7 +16,7 @@ angular.module('main')
 					return b > a;
 				});
 				angular.forEach(result, function (list, date) {
-					if (date == '$keys') { 
+					if (date === '$keys') {
 						return;
 					}
 					list.sort(function (a, b) {

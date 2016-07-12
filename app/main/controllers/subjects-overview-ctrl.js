@@ -25,7 +25,7 @@ angular.module('main')
 						if (!topic.status) {
 							topic.status = topic.done ? 'done' : 'fresh';
 						}
-						if (topic.status == 'done') {
+						if (topic.status === 'done') {
 							topic.done = true;
 						}
 					});
@@ -155,7 +155,7 @@ angular.module('main')
 			sessionStarModal.remove();
 		});
 		$scope.beginSession = function (minutes, rest) {
-			Sessions.start(minutes, $scope.subject, $scope.selectedTopic).then(function () {
+			Sessions.start(minutes, $scope.subject, $scope.selectedTopic, rest).then(function () {
 				$scope.subject.started = true;
 				$scope.selectedTopic.done = false;
 				$scope.selectedTopic.earned = 0;

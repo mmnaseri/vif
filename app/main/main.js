@@ -4,7 +4,6 @@ angular.module('main', [
 	'ngCordova',
 	'ui.router',
 	'LocalForageModule',
-	'ion-autocomplete',
 	'angular-svg-round-progressbar',
 	'ionic-lock-screen'
 	// TODO: load other modules selected during generation

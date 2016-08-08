@@ -1,6 +1,6 @@
 'use strict';
 
-describe('module: main, service: FocusHealth', function () {
+describe('module: main, service: Focus-health', function () {
 
 	// load the service's module
 	beforeEach(module('main'));
@@ -11,7 +11,9 @@ describe('module: main, service: FocusHealth', function () {
 	var FocusHealth;
 	beforeEach(inject(function (_FocusHealth_) {
 		FocusHealth = _FocusHealth_;
-	}));
+	}
+	))
+	;
 
 	it('should do something', function () {
 		expect(!!FocusHealth).toBe(true);

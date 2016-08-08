@@ -1,6 +1,6 @@
 'use strict';
 angular.module('main').service('Recuperation', function (DataStore, $q) {
-	var dataStore = DataStore('health');
+	var dataStore = DataStore('recuperation');
 	this.rest = function (length) {
 		return dataStore.all().where({
 			active: true

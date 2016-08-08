@@ -155,7 +155,7 @@ angular.module('main')
 							promise.first = function () {
 								var deferred = $q.defer();
 								promise.then(function (entities) {
-									deferred.resolve(entities.length ? entities[0] : null);
+									deferred.resolve(entities.length ? entities[0] : undefined);
 								}, deferred.reject);
 								return enhancePromise(deferred.promise);
 							};
@@ -286,6 +286,19 @@ angular.module('main')
 								});
 								return deferred.promise;
 							};
+							promise.count = function () {
+								var deferred = $q.defer();
+								promise.then(function (result) {
+									if (angular.isArray(result)) {
+										deferred.resolve(result.length);
+									} else if (angular.isDefined(result)) {
+										deferred.resolve(1);
+									} else {
+										deferred.resolve(0);
+									}
+								});
+								return deferred.promise;
+							};
 							return promise;
 						};
 						return enhancePromise(result.promise);
@@ -298,6 +311,9 @@ angular.module('main')
 							});
 						});
 						return $q.all(promises);
+					},
+					count: function () {
+						return $types[type].callbacks.all().count();
 					}
 				}
 			};

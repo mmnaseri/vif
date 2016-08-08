@@ -1,6 +1,6 @@
 'use strict';
 angular.module('main')
-	.service('Sessions', function (DataStore, $q, Points, Recuperation) {
+	.service('Sessions', function (DataStore, $q, Points, Recuperation, FocusHealth) {
 		var repository = DataStore('sessions');
 		this.active = function (active) {
 			return repository.all().where(function (item) {
@@ -78,14 +78,16 @@ angular.module('main')
 				});
 				return deferred.promise.then(function () {
 					var milliseconds = length * 60 * 1000;
-					return repository.save({
-						subject: subject,
-						topic: topic.$index,
-						active: true,
-						running: true,
-						length: milliseconds, //convert to milliseconds
-						remaining: milliseconds,
-						rest: rest * 60 * 1000
+					return FocusHealth.mode('STUDYING').then(function () {
+						return repository.save({
+							subject: subject,
+							topic: topic.$index,
+							active: true,
+							running: true,
+							length: milliseconds, //convert to milliseconds
+							remaining: milliseconds,
+							rest: rest * 60 * 1000
+						});
 					});
 				});
 			});
@@ -104,6 +106,7 @@ angular.module('main')
 						session.active = false;
 						promises.push(Points.earn(session));
 						promises.push(Recuperation.rest(session.rest));
+						promises.push(FocusHealth.mode('RESTING'));
 					}
 					promises.push(repository.save(session));
 				});
@@ -113,7 +116,9 @@ angular.module('main')
 		};
 		this.pause = function (session) {
 			session.running = false;
-			return repository.save(session);
+			return FocusHealth.mode('RESTING').then(function () {
+				return repository.save(session);
+			});
 		};
 		this.resume = function (session) {
 			return Recuperation.resting().then(function (resting) {
@@ -132,7 +137,9 @@ angular.module('main')
 				});
 				return deferred.promise.then(function () {
 					session.running = true;
-					return repository.save(session);
+					return FocusHealth.mode('STUDYING').then(function () {
+						return repository.save(session);
+					});
 				});
 			});
 		};
@@ -140,7 +147,9 @@ angular.module('main')
 			session.running = false;
 			session.active = false;
 			session.note = 'Cancelled';
-			return repository.save(session);
+			return FocusHealth.mode('RESTING').then(function () {
+				return repository.save(session);
+			});
 		};
 		this.all = function () {
 			return repository.all();

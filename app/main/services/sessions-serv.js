@@ -1,6 +1,6 @@
 'use strict';
 angular.module('main')
-	.service('Sessions', function (DataStore, $q) {
+	.service('Sessions', function (DataStore, $q, Points, FocusHealth) {
 		var repository = DataStore('sessions');
 		this.active = function (active) {
 			return repository.all().where(function (item) {
@@ -61,27 +61,32 @@ angular.module('main')
 			});
 		};
 		this.start = function (length, subject, topic, rest) {
-			rest = rest || Math.floor(length * length / 153 + 2);
-			var deferred = $q.defer();
-			repository.all().where(function (item) {
-				return item.active === true && item.running === true;
-			}).first().then(function (session) {
-				if (!session) {
-					deferred.resolve();
-				} else {
-					deferred.reject(session);
+			return FocusHealth.resting().then(function (resting) {
+				if (resting) {
+					throw new Error('Cannot start a session when you are supposed to be resting');
 				}
-			});
-			return deferred.promise.then(function () {
-				var milliseconds = length * 60 * 1000;
-				return repository.save({
-					subject: subject,
-					topic: topic.$index,
-					active: true,
-					running: true,
-					length: milliseconds, //convert to milliseconds
-					remaining: milliseconds,
-					rest: rest
+				rest = rest || Math.floor(length * length / 153 + 2);
+				var deferred = $q.defer();
+				repository.all().where(function (item) {
+					return item.active === true && item.running === true;
+				}).first().then(function (session) {
+					if (!session) {
+						deferred.resolve();
+					} else {
+						deferred.reject(session);
+					}
+				});
+				return deferred.promise.then(function () {
+					var milliseconds = length * 60 * 1000;
+					return repository.save({
+						subject: subject,
+						topic: topic.$index,
+						active: true,
+						running: true,
+						length: milliseconds, //convert to milliseconds
+						remaining: milliseconds,
+						rest: rest * 60 * 1000
+					});
 				});
 			});
 		};
@@ -92,10 +97,13 @@ angular.module('main')
 			}).then(function (running) {
 				var promises = [];
 				angular.forEach(running, function (session) {
-					session.remaining = Math.max(0, session.remaining - 1000);
+					var progress = Math.round((session.modifiedDate ? (Date.now() - session.modifiedDate) : 1000) / 1000) * 1000;
+					session.remaining = Math.max(0, session.remaining - progress);
 					if (session.remaining === 0) {
 						session.running = false;
 						session.active = false;
+						promises.push(Points.earn(session));
+						promises.push(FocusHealth.rest(session.rest));
 					}
 					promises.push(repository.save(session));
 				});
@@ -108,19 +116,24 @@ angular.module('main')
 			return repository.save(session);
 		};
 		this.resume = function (session) {
-			var deferred = $q.defer();
-			repository.all().where(function (item) {
-				return item.active === true && item.running === true;
-			}).first().then(function (session) {
-				if (!session) {
-					deferred.resolve();
-				} else {
-					deferred.reject(session);
+			return FocusHealth.resting().then(function (resting) {
+				if (resting) {
+					throw new Error('Cannot resume a session when you are supposed to be resting');
 				}
-			});
-			return deferred.promise.then(function () {
-				session.running = true;
-				return repository.save(session);
+				var deferred = $q.defer();
+				repository.all().where(function (item) {
+					return item.active === true && item.running === true;
+				}).first().then(function (session) {
+					if (!session) {
+						deferred.resolve();
+					} else {
+						deferred.reject(session);
+					}
+				});
+				return deferred.promise.then(function () {
+					session.running = true;
+					return repository.save(session);
+				});
 			});
 		};
 		this.cancel = function (session) {
@@ -133,6 +146,8 @@ angular.module('main')
 			return repository.all();
 		};
 		this.remove = function (session) {
-			return repository.remove(session);
+			return Points.remove(session).then(function () {
+				return repository.remove(session);
+			});
 		};
 	});

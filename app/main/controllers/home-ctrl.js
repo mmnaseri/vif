@@ -1,10 +1,14 @@
 'use strict';
 angular.module('main')
-	.controller('HomeCtrl', function (Sessions, $scope, $interval, $ionicActionSheet) {
+	.controller('HomeCtrl', function (Sessions, $scope, $interval, $ionicActionSheet, FocusHealth) {
+		$scope.interacting = false;
 		$scope.active = {};
+		$scope.rest = {};
 		$scope.paused = [];
 		var refresh = function () {
+			$scope.interacting = false;
 			Sessions.active($scope.active);
+			FocusHealth.active($scope.rest);
 			Sessions.paused($scope.paused);
 		};
 		$scope.$on('$ionicView.beforeEnter', refresh);

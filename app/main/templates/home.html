@@ -1,12 +1,12 @@
 <ion-view view-title="Home">
   <ion-content class="padding">
-	  <div class="card" ng-show="!active.$id">
+	  <div class="card" ng-show="!active.$id && !rest.$id">
 		  <p class="item item-icon-left item-dark">
 			  <i class="icon ion-ios-lightbulb-outline"></i>
 			  <span>You do not have any running sessions</span>
 		  </p>
 	  </div>
-	  <div ng-show="!active.$id && paused.length" class="card">
+	  <div ng-show="!active.$id && !rest.$id && paused.length" class="card">
 		  <ion-list>
 			  <ion-item class="item-icon-left" ng-repeat="session in paused" ng-click="resumeSession(session)">
 				  <i class="icon ion-ios-pause-outline"></i>
@@ -16,7 +16,7 @@
 			  </ion-item>
 		  </ion-list>
 	  </div>
-	  <div ng-show="active.$id" ng-init="interacting = false">
+	  <div ng-show="active.$id">
 		  <div class="progress-wrapper">
 			  <div class="progress ng-cloak" ng-style="getStyle()" ng-show="!interacting">{{getTime(active.remaining)}}</div>
 			  <round-progress
@@ -49,6 +49,28 @@
 		  </div>
 		  <h2 class="text-center">{{active.subject.title}}</h2>
 		  <h3 class="text-center">{{active.subject.topics[active.topic].title}}</h3>
+	  </div>
+	  <div ng-show="rest.$id">
+		  <div class="progress-wrapper">
+			  <div class="progress ng-cloak" ng-style="getStyle()">{{getTime(rest.remaining)}}</div>
+			  <round-progress
+				  max="rest.length"
+				  current="rest.remaining"
+				  color="#ce7d74"
+				  bgcolor="#e5b4b8"
+				  radius="125"
+				  semi="false"
+				  rounded="false"
+				  stroke="10"
+				  clockwise="false"
+				  responsive="false"
+				  duration="400"
+				  animation="easeOutCubic"
+				  offset="0"
+				  animation-delay="0">
+			  </round-progress>
+		  </div>
+		  <h2 class="text-center">Give it a rest &hellip;</h2>
 	  </div>
   </ion-content>
 </ion-view>

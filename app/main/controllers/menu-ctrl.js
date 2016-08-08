@@ -1,8 +1,8 @@
 'use strict';
 angular.module('main')
-	.controller('MenuCtrl', function (Sessions, $interval, FocusHealth) {
+	.controller('MenuCtrl', function (Sessions, $interval, Recuperation) {
 		$interval(function () {
 			Sessions.tick();
-			FocusHealth.tick();
+			Recuperation.tick();
 		}, 1000);
 	});

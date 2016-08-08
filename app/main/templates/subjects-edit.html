@@ -24,8 +24,7 @@
 				</div>
 				<a class="item item-icon-right" ng-click="view.dependencies = !view.dependencies"
 				   ng-show="subjects.length">
-					Depends on <span><ng-pluralize count="subject.dependencies.length"
-												   when="{'0': 'no other subject', 'one': 'one other subject', 'other': '{} other subjects'}"></ng-pluralize></span>
+					Depends on <span><ng-pluralize count="subject.dependencies.length" when="{'0': 'no other subject', 'one': 'one other subject', 'other': '{} other subjects'}"></ng-pluralize></span>
 					<i class="icon ion-chevron-right" ng-show="!view.dependencies"></i>
 					<i class="icon ion-chevron-down" ng-show="view.dependencies"></i>
 				</a>
@@ -35,8 +34,8 @@
 					</ion-checkbox>
 				</ion-list>
 			</div>
-			<button class="button button-dark button-block" ng-disabled="!SubjectEditForm.$valid || !subject.topics.length" ng-click="save()">
-				<i class="ion-ios-cloud-upload"></i> Save
+			<button class="button button-dark button-block icon-left" ng-disabled="!SubjectEditForm.$valid || !subject.topics.length" ng-click="save()">
+				<i class="icon ion-ios-download"></i> Save
 			</button>
 		</form>
 	</ion-content>

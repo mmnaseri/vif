@@ -1,5 +1,5 @@
 'use strict';
-angular.module('main').service('FocusHealth', function (DataStore, $q) {
+angular.module('main').service('Recuperation', function (DataStore, $q) {
 	var dataStore = DataStore('health');
 	this.rest = function (length) {
 		return dataStore.all().where({

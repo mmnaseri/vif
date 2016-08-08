@@ -1,54 +1,54 @@
 <ion-view view-title="Overview">
 	<ion-content class="padding">
 		<div class="list card">
-			<div class="item item-title">
-				<h3>{{subject.title}}</h3>
+			<div class="item item-dark">
+				{{subject.title}}
 			</div>
 			<a class="item item-icon-left" ng-repeat="topic in subject.topics" ng-click="topicSession(topic)">
 				<i class="icon" ng-class="{'active': 'ion-ios-bolt-outline', 'paused': 'ion-ios-pause-outline', 'fresh': 'ion-ios-circle-outline', 'done': 'ion-ios-checkmark'}[topic.status]"></i>
 				{{topic.title}}
-				<span class="badge badge-stable">{{topic.points}}</span>
+				<span class="badge badge-royal">{{topic.points}}</span>
 			</a>
 		</div>
 	</ion-content>
 	<script id="start-topic-session.html" type="text/ng-template">
 		<ion-modal-view>
-			<ion-header-bar class="bar bar-header bar-energized">
+			<ion-header-bar class="bar bar-header bar-dark">
 				<h1 class="title">Start a session</h1>
 				<button class="button button-clear button-primary" ng-click="closeModal()">Cancel</button>
 			</ion-header-bar>
 			<ion-content class="padding">
 				<div class="card list">
-					<a class="item item-icon-left assertive" ng-click="markDone()">
+					<a class="item item-icon-left calm" ng-click="markDone()">
 						<i class="icon ion-checkmark-circled"></i>
 						<span>Mark as done</span>
 					</a>
-					<a class="item item-icon-left" ng-click="beginSession(1, 1)">
-						<i class="icon">0</i>
-						<span>Start a 1 minutes session</span>
+					<a class="item item-icon-left balanced" ng-click="beginSession(1, 1)">
+						<i class="icon ion-ios-timer"></i>
+						<span>Start a 1 minute session</span>
 					</a>
-					<a class="item item-icon-left" ng-click="beginSession(15, 3)">
-						<i class="icon">1</i>
+					<a class="item item-icon-left balanced" ng-click="beginSession(15, 3)">
+						<i class="icon ion-ios-timer"></i>
 						<span>Start a 15 minutes session</span>
 					</a>
-					<a class="item item-icon-left" ng-click="beginSession(25, 5)">
-						<i class="icon">2</i>
+					<a class="item item-icon-left balanced" ng-click="beginSession(25, 5)">
+						<i class="icon ion-ios-timer"></i>
 						<span>Start a 25 minutes session</span>
 					</a>
-					<a class="item item-icon-left" ng-click="beginSession(45, 15)">
-						<i class="icon">3</i>
+					<a class="item item-icon-left energized" ng-click="beginSession(45, 15)">
+						<i class="icon ion-ios-timer"></i>
 						<span>Start a 45 minutes session</span>
 					</a>
-					<a class="item item-icon-left" ng-click="beginSession(60, 30)">
-						<i class="icon">4</i>
+					<a class="item item-icon-left energized" ng-click="beginSession(60, 30)">
+						<i class="icon ion-ios-timer"></i>
 						<span>Start a 60 minutes session</span>
 					</a>
-					<a class="item item-icon-left" ng-click="beginSession(90, 60)">
-						<i class="icon">4</i>
+					<a class="item item-icon-left assertive" ng-click="beginSession(90, 60)">
+						<i class="icon ion-ios-timer"></i>
 						<span>Start a 90 minutes session</span>
 					</a>
-					<a class="item item-icon-left" ng-click="beginSession(120, 90)">
-						<i class="icon">4</i>
+					<a class="item item-icon-left assertive" ng-click="beginSession(120, 90)">
+						<i class="icon ion-ios-timer"></i>
 						<span>Start a 120 minutes session</span>
 					</a>
 				</div>

@@ -14,7 +14,9 @@
     "ionic-lock-screen": "^1.0.1",
     "angular-svg-round-progressbar": "^0.4.6",
     "ionic-platform-web-client": "^0.7.1",
-    "dropbox-datastores": "^1.2.0"
+    "dropbox-datastores": "^1.2.0",
+    "angular-chart.js": "^1.0.0",
+    "chart.js": "npm:chart.js#^2.2.1"
   },
   "devDependencies": {
     "angular-mocks": "~1.5.7"

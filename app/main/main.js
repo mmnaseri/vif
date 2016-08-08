@@ -5,8 +5,8 @@ angular.module('main', [
 	'ui.router',
 	'LocalForageModule',
 	'angular-svg-round-progressbar',
-	'ionic-lock-screen'
-	// TODO: load other modules selected during generation
+	'ionic-lock-screen',
+	'chart.js'
 ])
 	.config(function ($stateProvider, $urlRouterProvider) {
 

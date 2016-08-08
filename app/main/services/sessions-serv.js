@@ -1,6 +1,6 @@
 'use strict';
 angular.module('main')
-	.service('Sessions', function (DataStore, $q, Points, FocusHealth) {
+	.service('Sessions', function (DataStore, $q, Points, Recuperation, FocusHealth) {
 		var repository = DataStore('sessions');
 		this.active = function (active) {
 			return repository.all().where(function (item) {
@@ -61,7 +61,7 @@ angular.module('main')
 			});
 		};
 		this.start = function (length, subject, topic, rest) {
-			return FocusHealth.resting().then(function (resting) {
+			return Recuperation.resting().then(function (resting) {
 				if (resting) {
 					throw new Error('Cannot start a session when you are supposed to be resting');
 				}
@@ -78,14 +78,16 @@ angular.module('main')
 				});
 				return deferred.promise.then(function () {
 					var milliseconds = length * 60 * 1000;
-					return repository.save({
-						subject: subject,
-						topic: topic.$index,
-						active: true,
-						running: true,
-						length: milliseconds, //convert to milliseconds
-						remaining: milliseconds,
-						rest: rest * 60 * 1000
+					return FocusHealth.mode('STUDYING').then(function () {
+						return repository.save({
+							subject: subject,
+							topic: topic.$index,
+							active: true,
+							running: true,
+							length: milliseconds, //convert to milliseconds
+							remaining: milliseconds,
+							rest: rest * 60 * 1000
+						});
 					});
 				});
 			});
@@ -103,7 +105,8 @@ angular.module('main')
 						session.running = false;
 						session.active = false;
 						promises.push(Points.earn(session));
-						promises.push(FocusHealth.rest(session.rest));
+						promises.push(Recuperation.rest(session.rest));
+						promises.push(FocusHealth.mode('RESTING'));
 					}
 					promises.push(repository.save(session));
 				});
@@ -113,10 +116,12 @@ angular.module('main')
 		};
 		this.pause = function (session) {
 			session.running = false;
-			return repository.save(session);
+			return FocusHealth.mode('RESTING').then(function () {
+				return repository.save(session);
+			});
 		};
 		this.resume = function (session) {
-			return FocusHealth.resting().then(function (resting) {
+			return Recuperation.resting().then(function (resting) {
 				if (resting) {
 					throw new Error('Cannot resume a session when you are supposed to be resting');
 				}
@@ -132,7 +137,9 @@ angular.module('main')
 				});
 				return deferred.promise.then(function () {
 					session.running = true;
-					return repository.save(session);
+					return FocusHealth.mode('STUDYING').then(function () {
+						return repository.save(session);
+					});
 				});
 			});
 		};
@@ -140,7 +147,9 @@ angular.module('main')
 			session.running = false;
 			session.active = false;
 			session.note = 'Cancelled';
-			return repository.save(session);
+			return FocusHealth.mode('RESTING').then(function () {
+				return repository.save(session);
+			});
 		};
 		this.all = function () {
 			return repository.all();

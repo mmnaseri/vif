@@ -1,6 +1,6 @@
 'use strict';
 angular.module('main')
-	.controller('SubjectsOverviewCtrl', function ($scope, SubjectsService, $stateParams, $ionicActionSheet, $ionicModal, Sessions, $state) {
+	.controller('SubjectsOverviewCtrl', function ($scope, SubjectsService, $stateParams, $ionicActionSheet, $ionicModal, Sessions, $state, $q) {
 		$scope.subject = {};
 		var refresh = function () {
 			SubjectsService.get($stateParams.id).then(function (subject) {
@@ -51,22 +51,39 @@ angular.module('main')
 					var hide = $ionicActionSheet.show({
 						buttons: [],
 						destructiveText: 'Restart topic',
-						titleText: 'Are you sure that you want to restart this topic and lose any study points you might have accumulated?',
+						titleText: 'Are you sure that you want to restart this topic and lose any study points you might have earned?',
 						cancelText: 'Cancel',
 						destructiveButtonClicked: function () {
-							var totalEarned = 0;
-							var started = false;
-							topic.done = false;
-							//todo if anything was earned, we have to remove it
-							topic.earned = 0;
-							angular.forEach($scope.subject.topics, function (topic) {
-								totalEarned += topic.earned || 0;
-								started = topic.done;
+							var readyToReset = $q.defer();
+							Sessions.all().where({
+								subject: {
+									$id: $scope.subject.$id
+								},
+								topic: topic.$index,
+								active: false,
+								remaining: 0
+							}).first().then(function (session) {
+								if (!session) {
+									readyToReset.resolve();
+								} else {
+									Sessions.remove(session).then(readyToReset.resolve);
+								}
 							});
-							started = started || totalEarned > 0;
-							$scope.subject.started = started;
-							SubjectsService.save($scope.subject).then(refresh);
-							hide();
+							readyToReset.promise.then(function () {
+								var totalEarned = 0;
+								var started = false;
+								topic.done = false;
+								//todo if anything was earned, we have to remove it
+								topic.earned = 0;
+								angular.forEach($scope.subject.topics, function (topic) {
+									totalEarned += topic.earned || 0;
+									started = started || topic.done;
+								});
+								started = started || totalEarned > 0;
+								$scope.subject.started = started;
+								SubjectsService.save($scope.subject).then(refresh);
+								hide();
+							});
 						}
 					});
 				},

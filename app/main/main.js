@@ -73,6 +73,24 @@ angular.module('main', [
 						controller: 'SessionsListingCtrl'
 					}
 				}
+			})
+			.state('main.points', {
+				url: '/points',
+				views: {
+					'pageContent': {
+						templateUrl: 'main/templates/points.html',
+						controller: 'PointsCtrl'
+					}
+				}
+			})
+			.state('main.health', {
+				url: '/health',
+				views: {
+					'pageContent': {
+						templateUrl: 'main/templates/health.html',
+						controller: 'HealthCtrl'
+					}
+				}
 			});
 	})
 	.run(function ($rootScope) {

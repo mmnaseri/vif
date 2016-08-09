@@ -1,5 +1,5 @@
 'use strict';
-angular.module('main').controller('HealthCtrl', function (FocusHealth, $scope, $interval, $filter) {
+angular.module('main').controller('HealthCtrl', function (FocusHealth, $scope, $interval, $filter, $ionicActionSheet) {
 	var date = $filter('date');
 	$scope.data = [];
 	$scope.labels = [];
@@ -35,4 +35,18 @@ angular.module('main').controller('HealthCtrl', function (FocusHealth, $scope, $
 	};
 	$scope.$on('$ionicView.beforeEnter', refresh);
 	$interval(refresh, 60000);
+	$scope.clear = function () {
+		var hide = $ionicActionSheet.show({
+			buttons: [],
+			destructiveText: 'Clear Health Data',
+			titleText: 'This action will remove all of your health data. Are you sure?',
+			cancelText: 'Cancel',
+			destructiveButtonClicked: function () {
+				FocusHealth.all().remove().then(function () {
+					refresh();
+					hide();
+				});
+			}
+		});
+	}
 });

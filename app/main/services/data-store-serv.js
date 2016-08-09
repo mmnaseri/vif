@@ -93,15 +93,17 @@ angular.module('main')
 									cache[type][id] = item;
 								}
 								var dependencies = [];
-								angular.forEach(Object.keys(item), function (property) {
-									if (DataStore.Ref.isRef(item[property])) {
-										var promise = DataStore(item[property].$ref).load(item[property].$id, cache || {});
-										dependencies.push(promise);
-										promise.then(function (value) {
-											item[property] = value;
-										});
-									}
-								});
+								if (angular.isObject(item)) {
+									angular.forEach(Object.keys(item), function (property) {
+										if (DataStore.Ref.isRef(item[property])) {
+											var promise = DataStore(item[property].$ref).load(item[property].$id, cache || {});
+											dependencies.push(promise);
+											promise.then(function (value) {
+												item[property] = value;
+											});
+										}
+									});
+								}
 								if (dependencies.length > 0) {
 									$q.all(dependencies).then(function () {
 										result.resolve(item);

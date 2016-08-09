@@ -1,16 +1,12 @@
-<ion-view view-title="main module">
-	<!-- do you want padding? -->
-	<ion-content class="padding">
-
-		<!-- content goes here -->
-		<ion-list>
-			<ion-item class="item item-divider">
-				This is your health template!
-			</ion-item>
-			<ion-item class="item item-icon">
-				Yeiiii!
-			</ion-item>
-		</ion-list>
-
+<ion-view view-title="Focus Health">
+	<div class="bar bar-subheader">
+		<h2 class="title">Health Data</h2>
+		<button class="button" ng-click="refresh()"><i class="icon ion-refresh"></i></button>
+	</div>
+	<ion-content class="padding has-subheader">
+		<square>
+			<canvas parent-height id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-options="options">
+			</canvas>
+		</square>
 	</ion-content>
 </ion-view>

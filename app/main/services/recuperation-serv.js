@@ -13,7 +13,7 @@ angular.module('main').service('Recuperation', function (DataStore, $q) {
 		});
 	};
 	this.tick = function () {
-		dataStore.all().where({
+		return dataStore.all().where({
 			active: true
 		}).then(function (rests) {
 			var promises = [];

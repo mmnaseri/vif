@@ -78,7 +78,7 @@ angular.module('main')
 				});
 				return deferred.promise.then(function () {
 					var milliseconds = length * 60 * 1000;
-					return FocusHealth.mode('STUDYING').then(function () {
+					return FocusHealth.mode(FocusHealth.modes.STUDYING).then(function () {
 						return repository.save({
 							subject: subject,
 							topic: topic.$index,
@@ -106,7 +106,7 @@ angular.module('main')
 						session.active = false;
 						promises.push(Points.earn(session));
 						promises.push(Recuperation.rest(session.rest));
-						promises.push(FocusHealth.mode('RESTING'));
+						promises.push(FocusHealth.mode(FocusHealth.modes.RESTING));
 					}
 					promises.push(repository.save(session));
 				});
@@ -116,7 +116,7 @@ angular.module('main')
 		};
 		this.pause = function (session) {
 			session.running = false;
-			return FocusHealth.mode('RESTING').then(function () {
+			return FocusHealth.mode(FocusHealth.modes.RESTING).then(function () {
 				return repository.save(session);
 			});
 		};
@@ -137,7 +137,7 @@ angular.module('main')
 				});
 				return deferred.promise.then(function () {
 					session.running = true;
-					return FocusHealth.mode('STUDYING').then(function () {
+					return FocusHealth.mode(FocusHealth.modes.STUDYING).then(function () {
 						return repository.save(session);
 					});
 				});
@@ -147,7 +147,7 @@ angular.module('main')
 			session.running = false;
 			session.active = false;
 			session.note = 'Cancelled';
-			return FocusHealth.mode('RESTING').then(function () {
+			return FocusHealth.mode(FocusHealth.modes.RESTING).then(function () {
 				return repository.save(session);
 			});
 		};

@@ -6,15 +6,18 @@
 			  <span>You do not have any running sessions</span>
 		  </p>
 	  </div>
-	  <div ng-show="!active.$id && !rest.$id && paused.length" class="card">
-		  <ion-list>
-			  <ion-item class="item-icon-left" ng-repeat="session in paused" ng-click="resumeSession(session)">
-				  <i class="icon ion-ios-pause-outline"></i>
-				  {{session.subject.title}} &mdash; {{session.subject.topics[session.topic].title}}
-				  <span class="badge badge-stable">{{getTime(session.remaining)}}</span>
-				  <ion-option-button class="button-assertive" ng-click="cancelSession(session)">End</ion-option-button>
-			  </ion-item>
-		  </ion-list>
+	  <div ng-show="!active.$id && !rest.$id && paused.length">
+		  <div class="card">
+			  <h4 class="item item-divider">Your Other Sessions</h4>
+			  <ion-list>
+				  <ion-item class="item-icon-left" ng-repeat="session in paused" ng-click="resumeSession(session)">
+					  <i class="icon ion-ios-pause-outline"></i>
+					  {{session.subject.title}} &mdash; {{session.subject.topics[session.topic].title}}
+					  <span class="badge badge-stable">{{getTime(session.remaining)}}</span>
+					  <ion-option-button class="button-assertive" ng-click="cancelSession(session)">End</ion-option-button>
+				  </ion-item>
+			  </ion-list>
+		  </div>
 	  </div>
 	  <div ng-show="active.$id">
 		  <div class="progress-wrapper">
